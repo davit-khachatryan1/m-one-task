@@ -43,5 +43,7 @@
 
 - For source changes, run lint, strict type-checking, the full test suite, and the production build. Confirm the list and detail route chunks remain separate when routing or imports change.
 - For visual changes, also check light and dark themes, mobile/tablet/desktop layouts, keyboard order, focus states, and relevant loading/error/empty states in a browser.
+- Use `$frontend-quality-check` when asked to verify or finalize source and UI changes. Use the read-only `frontend_reviewer` agent for requested independent reviews or non-trivial changes that materially benefit from a separate review pass; do not delegate routine edits merely because the agent exists.
+- Use `$project-skill-author` when asked to create or update a repository-scoped skill. Keep skill additions focused and avoid duplicating built-in capabilities or durable guidance already owned by this file.
 - Report only checks that were actually completed. Update `README.md` and `AI/context.md` whenever documented behavior or architecture changes.
 - Do not create Git commits or push changes unless the user explicitly requests it.
