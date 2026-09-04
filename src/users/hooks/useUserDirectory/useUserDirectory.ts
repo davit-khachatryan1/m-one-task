@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import type { UsersLoadStatus } from '../../providers/usersProvider/UsersContext'
-import type { User } from '../../types/user'
+import type { UsersLoadStatus } from '../../providers/UsersContext'
+import type { User } from '../../types/user/user'
 import {
   deriveUserList,
   getAvailableCities,

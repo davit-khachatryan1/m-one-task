@@ -1,4 +1,5 @@
-import type { User } from '../../types/user'
+import { getBrowserStorage } from '../../../shared/storage/getBrowserStorage/getBrowserStorage'
+import type { User } from '../../types/user/user'
 
 export const USER_NAME_OVERRIDES_KEY = 'user-name-overrides:v1'
 
@@ -12,18 +13,6 @@ interface StoredUserNameOverrides {
 export type SaveOverrideResult =
   | { ok: true; overrides: UserNameOverrides }
   | { ok: false; message: string }
-
-function getBrowserStorage(): Storage | null {
-  if (typeof window === 'undefined') {
-    return null
-  }
-
-  try {
-    return window.localStorage
-  } catch {
-    return null
-  }
-}
 
 function isValidNames(value: unknown): value is UserNameOverrides {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {

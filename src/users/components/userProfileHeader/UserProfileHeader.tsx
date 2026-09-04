@@ -1,5 +1,6 @@
 import { Pencil } from 'lucide-react'
-import type { User } from '../../types/user'
+import { getInitials } from '../../helpers/getInitials/getInitials'
+import type { User } from '../../types/user/user'
 
 interface UserProfileHeaderProps {
   user: User
@@ -7,21 +8,12 @@ interface UserProfileHeaderProps {
   onEdit: () => void
 }
 
-function getInitials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toLocaleUpperCase())
-    .join('')
-}
-
 export function UserProfileHeader({ user, isEditing, onEdit }: UserProfileHeaderProps) {
   return (
     <header className="rounded-xl border border-neutral-200 bg-white p-5 sm:p-6 dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
         <div
-          className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-neutral-200 bg-neutral-100 text-base font-semibold text-brand-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-brand-400"
+          className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-neutral-200 bg-accent text-base font-semibold text-neutral-950 dark:border-neutral-700"
           aria-hidden="true"
         >
           {getInitials(user.name)}
@@ -38,7 +30,7 @@ export function UserProfileHeader({ user, isEditing, onEdit }: UserProfileHeader
           <button
             type="button"
             onClick={onEdit}
-            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800 dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto dark:focus-visible:ring-offset-neutral-900"
+            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto dark:focus-visible:ring-offset-neutral-900"
           >
             <Pencil aria-hidden="true" size={16} />
             Edit name

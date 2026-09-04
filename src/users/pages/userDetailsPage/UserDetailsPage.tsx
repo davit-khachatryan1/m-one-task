@@ -6,7 +6,7 @@ import { EditNameForm } from '../../components/editNameForm/EditNameForm'
 import { UserDetailsGrid } from '../../components/userDetailsGrid/UserDetailsGrid'
 import { UserProfileHeader } from '../../components/userProfileHeader/UserProfileHeader'
 import { useUsers } from '../../hooks/useUsers/useUsers'
-import type { User } from '../../types/user'
+import type { User } from '../../types/user/user'
 
 function getReturnPath(state: unknown): string {
   if (typeof state !== 'object' || state === null || !('fromList' in state)) {
@@ -25,7 +25,7 @@ function UserDetails({ user, returnPath }: { user: User; returnPath: string }) {
     <>
       <Link
         to={returnPath}
-        className="mb-4 inline-flex items-center gap-2 rounded-md text-sm font-medium text-neutral-600 transition hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-4 motion-reduce:transition-none dark:text-neutral-300 dark:hover:text-brand-300 dark:focus-visible:ring-offset-neutral-950"
+        className="mb-4 inline-flex items-center gap-2 rounded-md text-sm font-medium text-neutral-600 transition hover:text-neutral-950 hover:underline hover:underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-4 motion-reduce:transition-none dark:text-neutral-300 dark:hover:text-white dark:focus-visible:ring-offset-neutral-950"
       >
         <ArrowLeft aria-hidden="true" size={17} />
         Back to users
@@ -96,7 +96,7 @@ export default function UserDetailsPage() {
             <button
               type="button"
               onClick={retry}
-              className="inline-flex h-10 items-center justify-center rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800 dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900"
+              className="inline-flex h-10 items-center justify-center rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900"
             >
               Try again
             </button>
@@ -113,7 +113,7 @@ export default function UserDetailsPage() {
           action={
             <Link
               to={returnPath}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800 dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900"
             >
               <ArrowLeft aria-hidden="true" size={17} />
               Back to users

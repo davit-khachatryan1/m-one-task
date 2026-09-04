@@ -1,4 +1,4 @@
-import type { User } from '../../types/user'
+import type { User } from '../../types/user/user'
 
 export const USERS_PAGE_SIZE = 5
 export type SortDirection = 'asc' | 'desc'

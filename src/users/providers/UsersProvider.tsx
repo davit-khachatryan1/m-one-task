@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { fetchUsers } from '../../api/fetchUsers/fetchUsers'
+import { fetchUsers } from '../api/fetchUsers/fetchUsers'
 import {
   mergeUserNameOverrides,
   persistUserNameOverride,
   readUserNameOverrides,
-} from '../../storage/userNameOverrides/userNameOverrides'
-import type { User } from '../../types/user'
+} from '../storage/userNameOverrides/userNameOverrides'
+import type { User } from '../types/user/user'
 import { UsersContext, type SaveNameResult, type UsersLoadStatus } from './UsersContext'
 
 interface UsersProviderProps {

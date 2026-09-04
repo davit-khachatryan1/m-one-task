@@ -39,7 +39,7 @@ export function PageState({
           className={`${compact ? 'shrink-0' : 'mb-4'} grid h-10 w-10 place-items-center rounded-lg ${
             tone === 'error'
               ? 'bg-red-50 text-red-600 dark:bg-red-950/60 dark:text-red-400'
-              : 'border border-neutral-200 bg-neutral-100 text-brand-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-brand-400'
+              : 'border border-neutral-200 bg-accent text-neutral-950 dark:border-neutral-700'
           }`}
           aria-hidden="true"
         >

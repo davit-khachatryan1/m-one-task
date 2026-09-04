@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import { makeUser, sampleUser } from '../../../test/fixtures'
-import { UsersProvider } from '../../providers/usersProvider/UsersProvider'
+import { UsersProvider } from '../../providers/UsersProvider'
 import { USER_NAME_OVERRIDES_KEY } from '../../storage/userNameOverrides/userNameOverrides'
 import UserDetailsPage from './UserDetailsPage'
 

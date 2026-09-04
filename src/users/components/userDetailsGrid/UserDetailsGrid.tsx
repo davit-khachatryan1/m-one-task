@@ -1,6 +1,6 @@
 import { Building2, Globe2, Mail, MapPin, Phone } from 'lucide-react'
 import type { ReactNode } from 'react'
-import type { User } from '../../types/user'
+import type { User } from '../../types/user/user'
 
 interface UserDetailsGridProps {
   user: User
@@ -10,7 +10,7 @@ function DetailCard({ title, icon, children, wide = false }: { title: string; ic
   return (
     <section className={`rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900 ${wide ? 'lg:col-span-2' : ''}`}>
       <div className="mb-5 flex items-center gap-2.5">
-        <span className="grid h-8 w-8 place-items-center rounded-lg border border-neutral-200 bg-neutral-100 text-brand-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-brand-400" aria-hidden="true">
+        <span className="grid h-8 w-8 place-items-center rounded-lg border border-neutral-200 bg-accent text-neutral-950 dark:border-neutral-700" aria-hidden="true">
           {icon}
         </span>
         <h2 className="text-base font-semibold text-neutral-950 dark:text-white">{title}</h2>
@@ -34,7 +34,7 @@ export function UserDetailsGrid({ user }: UserDetailsGridProps) {
               <span>Email</span>
             </dt>
             <dd className={`${definitionClassName} pl-7`}>
-              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`mailto:${user.email}`}>
+              <a className="text-neutral-700 underline-offset-2 hover:text-neutral-950 hover:underline dark:text-neutral-300 dark:hover:text-white" href={`mailto:${user.email}`}>
                 {user.email}
               </a>
             </dd>
@@ -45,7 +45,7 @@ export function UserDetailsGrid({ user }: UserDetailsGridProps) {
               <span>Phone</span>
             </dt>
             <dd className={`${definitionClassName} pl-7`}>
-              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`tel:${user.phone}`}>
+              <a className="text-neutral-700 underline-offset-2 hover:text-neutral-950 hover:underline dark:text-neutral-300 dark:hover:text-white" href={`tel:${user.phone}`}>
                 {user.phone}
               </a>
             </dd>
@@ -56,7 +56,7 @@ export function UserDetailsGrid({ user }: UserDetailsGridProps) {
               <span>Website</span>
             </dt>
             <dd className={`${definitionClassName} pl-7`}>
-              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`https://${user.website}`} target="_blank" rel="noreferrer">
+              <a className="text-neutral-700 underline-offset-2 hover:text-neutral-950 hover:underline dark:text-neutral-300 dark:hover:text-white" href={`https://${user.website}`} target="_blank" rel="noreferrer">
                 {user.website}
               </a>
             </dd>

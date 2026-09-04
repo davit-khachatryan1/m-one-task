@@ -1,7 +1,7 @@
 import { Save, X } from 'lucide-react'
 import { useId, useState, type FormEvent } from 'react'
 import { useUsers } from '../../hooks/useUsers/useUsers'
-import type { User } from '../../types/user'
+import type { User } from '../../types/user/user'
 
 interface EditNameFormProps {
   user: User
@@ -61,7 +61,7 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
             setValidationError(null)
             setSaveError(null)
           }}
-          className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 aria-invalid:border-red-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-400"
+          className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 aria-invalid:border-red-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-500"
           aria-invalid={validationError ? 'true' : undefined}
           aria-describedby={validationError ? nameErrorId : undefined}
           autoFocus
@@ -87,7 +87,7 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
           </button>
           <button
             type="submit"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800 dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-950"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-950"
           >
             <Save aria-hidden="true" size={16} />
             Save changes

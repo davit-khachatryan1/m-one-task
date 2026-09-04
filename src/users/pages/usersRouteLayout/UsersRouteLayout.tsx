@@ -1,7 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
-import { UsersProvider } from '../../providers/usersProvider/UsersProvider'
+import { UsersProvider } from '../../providers/UsersProvider'
 
 export function UsersRouteLayout() {
   return (

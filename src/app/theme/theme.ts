@@ -1,3 +1,5 @@
+import { getBrowserStorage } from '../../shared/storage/getBrowserStorage/getBrowserStorage'
+
 export const THEME_STORAGE_KEY = 'app-theme:v1'
 export const DARK_MODE_QUERY = '(prefers-color-scheme: dark)'
 
@@ -11,18 +13,6 @@ interface StoredThemePreference {
 
 type ThemeStorageReader = Pick<Storage, 'getItem'>
 type ThemeStorageWriter = Pick<Storage, 'setItem'>
-
-function getBrowserStorage(): Storage | null {
-  if (typeof window === 'undefined') {
-    return null
-  }
-
-  try {
-    return window.localStorage
-  } catch {
-    return null
-  }
-}
 
 export function readThemePreference(
   storage: ThemeStorageReader | null = getBrowserStorage(),

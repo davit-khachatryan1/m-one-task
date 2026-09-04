@@ -227,7 +227,7 @@ export function FilterDropdown<Value extends string>({
         aria-haspopup="listbox"
         aria-labelledby={labelId}
         aria-activedescendant={isOpen ? `${listboxId}-option-${activeIndex}` : undefined}
-        className="flex h-10 w-full items-center rounded-lg border border-neutral-300 bg-white text-left text-sm font-medium text-neutral-900 outline-none transition hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-400"
+        className="flex h-10 w-full items-center rounded-lg border border-neutral-300 bg-white text-left text-sm font-medium text-neutral-900 outline-none transition hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-500"
         onClick={() => (isOpen ? closeDropdown() : openDropdown())}
         onKeyDown={handleKeyDown}
       >
@@ -263,14 +263,14 @@ export function FilterDropdown<Value extends string>({
                 aria-selected={isSelected}
                 className={`flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm outline-none ${
                   isActive
-                    ? 'bg-brand-50 text-brand-900 dark:bg-neutral-800 dark:text-white'
+                    ? 'bg-accent text-neutral-950'
                     : 'text-neutral-700 dark:text-neutral-200'
                 }`}
                 onClick={() => selectOption(index)}
                 onMouseEnter={() => setActiveIndex(index)}
               >
                 <span className="min-w-0 flex-1 truncate">{option.label}</span>
-                <span className="grid h-4 w-4 shrink-0 place-items-center text-brand-700 dark:text-brand-400">
+                <span className="grid h-4 w-4 shrink-0 place-items-center text-neutral-950">
                   {isSelected ? <Check aria-hidden="true" size={15} strokeWidth={2.5} /> : null}
                 </span>
               </li>

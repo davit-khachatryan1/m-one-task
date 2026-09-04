@@ -1,15 +1,15 @@
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { ThemeToggle } from '../../components/themeToggle/ThemeToggle'
-import { useTheme } from '../../hooks/useTheme/useTheme'
+import { ThemeToggle } from '../components/themeToggle/ThemeToggle'
+import { useTheme } from '../hooks/useTheme/useTheme'
 import { ThemeProvider } from './ThemeProvider'
 import {
   initializeTheme,
   persistThemePreference,
   readThemePreference,
   THEME_STORAGE_KEY,
-} from '../../theme/theme'
+} from '../theme/theme'
 
 function createMediaQueryList(matches: boolean): MediaQueryList {
   return {

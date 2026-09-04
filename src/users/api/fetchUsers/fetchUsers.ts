@@ -1,4 +1,4 @@
-import type { Address, Company, Geo, User } from '../../types/user'
+import type { Address, Company, Geo, User } from '../../types/user/user'
 
 const USERS_ENDPOINT = 'https://jsonplaceholder.typicode.com/users'
 

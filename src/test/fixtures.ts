@@ -1,4 +1,4 @@
-import type { User } from '../users/types/user'
+import type { User } from '../users/types/user/user'
 
 export const sampleUser: User = {
   id: 1,

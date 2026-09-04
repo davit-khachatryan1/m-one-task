@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
-import { sampleUser } from '../../../test/fixtures'
-import { UsersProvider } from '../../providers/usersProvider/UsersProvider'
+import { makeUser, sampleUser } from '../../../test/fixtures'
+import { UsersProvider } from '../../providers/UsersProvider'
 import UsersListPage from './UsersListPage'
 
 function LocationProbe() {
@@ -13,13 +13,20 @@ function LocationProbe() {
 
 describe('UsersListPage request states', () => {
   it('recovers from a failed request when Retry succeeds', async () => {
+    const users = [
+      sampleUser,
+      makeUser(2, 'Ervin Howell', 'ervin@example.com', 'Wisokyburgh'),
+      makeUser(3, 'Clementine Bauch', 'clementine@example.com', 'McKenziehaven'),
+      makeUser(4, 'Patricia Lebsack', 'patricia@example.com', 'South Elvis'),
+      makeUser(5, 'Chelsey Dietrich', 'chelsey@example.com', 'Roscoeview'),
+    ]
     const fetchMock = vi
       .fn()
       .mockRejectedValueOnce(new Error('Network unavailable'))
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => [sampleUser],
+        json: async () => users,
       })
     vi.stubGlobal('fetch', fetchMock)
     const interaction = userEvent.setup()
@@ -38,11 +45,14 @@ describe('UsersListPage request states', () => {
     await interaction.click(screen.getByRole('button', { name: /try again/i }))
 
     expect(await screen.findByText(sampleUser.name)).toBeVisible()
-    expect(screen.getByRole('table', { name: 'Users' })).toBeVisible()
-    expect(screen.getByRole('columnheader', { name: 'Name' })).toBeVisible()
-    expect(screen.getByRole('columnheader', { name: 'Email' })).toBeVisible()
-    expect(screen.getByRole('columnheader', { name: 'City' })).toBeVisible()
-    expect(screen.getByRole('columnheader', { name: 'Company' })).toBeVisible()
+    expect(screen.getByRole('list', { name: 'Users' })).toBeVisible()
+    expect(screen.getAllByRole('listitem')).toHaveLength(5)
+    expect(screen.getByText(sampleUser.email)).toBeVisible()
+    expect(screen.getByText(sampleUser.address.city)).toBeVisible()
+    expect(screen.getByText(sampleUser.company.name)).toBeVisible()
+    expect(
+      screen.getByRole('link', { name: `View details for ${sampleUser.name}` }),
+    ).toBeVisible()
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 

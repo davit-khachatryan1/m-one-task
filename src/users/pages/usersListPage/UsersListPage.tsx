@@ -3,12 +3,12 @@ import { useLocation } from 'react-router-dom'
 import { PageState } from '../../../shared/ui/pageState/PageState'
 import { DirectoryToolbar } from '../../components/directoryToolbar/DirectoryToolbar'
 import { Pagination } from '../../components/pagination/Pagination'
-import { UsersTable } from '../../components/usersTable/UsersTable'
+import { UsersCardGrid } from '../../components/usersCardGrid/UsersCardGrid'
 import { useUserDirectory } from '../../hooks/useUserDirectory/useUserDirectory'
 import { useUsers } from '../../hooks/useUsers/useUsers'
 
 const primaryButtonClassName =
-  'inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 text-sm font-medium text-white transition hover:bg-brand-800 dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900'
+  'inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900'
 
 export default function UsersListPage() {
   const { status, users, error, retry } = useUsers()
@@ -95,7 +95,7 @@ export default function UsersListPage() {
             />
           ) : (
             <div className="mt-5">
-              <UsersTable users={directory.result.items} fromList={fromList} />
+              <UsersCardGrid users={directory.result.items} fromList={fromList} />
             </div>
           )}
 

@@ -9,7 +9,7 @@ import {
   resolveTheme,
   type Theme,
   type ThemePreference,
-} from '../../theme/theme'
+} from '../theme/theme'
 
 interface ThemeProviderProps {
   children: ReactNode

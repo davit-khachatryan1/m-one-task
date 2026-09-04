@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import {
   UsersContext,
   type UsersContextValue,
-} from '../../providers/usersProvider/UsersContext'
+} from '../../providers/UsersContext'
 
 export function useUsers(): UsersContextValue {
   const context = useContext(UsersContext)

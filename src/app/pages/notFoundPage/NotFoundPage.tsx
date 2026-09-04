@@ -13,7 +13,7 @@ export function NotFoundPage() {
         action={
           <Link
             to="/users"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:bg-brand-500 dark:text-neutral-950 dark:hover:bg-brand-400 dark:focus-visible:ring-offset-neutral-950"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 text-sm font-semibold text-neutral-950 shadow-sm transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-950"
           >
             <ArrowLeft aria-hidden="true" size={17} />
             Back to users

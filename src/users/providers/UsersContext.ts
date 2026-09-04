@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { User } from '../../types/user'
+import type { User } from '../types/user/user'
 
 export type UsersLoadStatus = 'loading' | 'success' | 'error'
 export type SaveNameResult = { ok: true } | { ok: false; message: string }
