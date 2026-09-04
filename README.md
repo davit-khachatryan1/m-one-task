@@ -22,33 +22,90 @@ npm test
 npm run build
 ```
 
+*The text below was written by me and polished with AI assistance for clear, grammatically correct sentences.*
+
 ## Decisions
 
-- The application uses React 19, strict TypeScript, React Router, Vite, and Tailwind CSS v4. Tailwind keeps responsive light/dark styling colocated without introducing a component library or design system.
-- `/users` contains search by name or email, an exact single-city filter, locale-aware name sorting, and five-record client-side pagination. The fixture has only ten users, but pagination makes larger-list behavior visible. A production-scale dataset would require a server-side contract.
-- List state is stored in the `q`, `city`, `sort=desc`, and `page` URL parameters. Search, filter, and sort replace history and reset page one; pagination pushes history. This preserves reload and Back behavior without duplicating state.
-- `/users/:userId` is a separate lazy route. Detail links carry the originating list URL, while direct entry falls back to `/users`.
-- Vercel uses the root `vercel.json` SPA rewrite so direct visits and refreshes under `/users` serve the application before React Router resolves the route. The production document also declares a favicon, crawler policy, and an early connection to the users API.
-- The users route provider fetches once, validates the complete API response from `unknown`, and uses `AbortController` plus a latest-request identifier. Search and filtering are local, so typing does not create requests that can resolve out of order.
-- Loading, request error with Retry, empty API data, no matching filters, and unknown user IDs have distinct UI states. No artificial failures or delays are shipped in production code.
-- Only successfully saved names persist in `localStorage` under the versioned `user-name-overrides:v1` schema. A local name overrides the fresh API name; every other field remains fresh from the API. Saving the API name removes the redundant override, and a failed storage write does not update memory or report success.
-- Names are trimmed and cannot be empty. Unsaved drafts do not persist because only confirmed edits represent user intent.
-- The responsive UI uses one semantic table that reflows into cards below the medium breakpoint. The custom city and sort listboxes provide themed popups, keyboard navigation, typeahead, focus restoration, and appropriate ARIA state without adding a UI dependency.
-- An explicit light/dark preference persists under `app-theme:v1`; otherwise the application follows system color-scheme changes. Reduced motion, visible focus, semantic feedback, keyboard use, and pointer use are supported.
-- Tests are included because URL normalization, persistence precedence, storage failure, request retry/race protection, custom listbox behavior, semantic detail markup, routing, and theme behavior have meaningful regression risk. The current suite contains 27 behavior tests.
-- Ambiguities were resolved as follows: city filtering is single-select; editing occurs only on the detail page; pagination is client-side; only saved names and explicit theme choice use browser storage; URL state preserves list controls; name validation adds no unrequested length or character restrictions; cross-tab synchronization, backend persistence, authentication, conflict versioning, and analytics are out of scope.
-- Verification covered automated linting, strict type-checking, 27 tests, and a production build with separate list/detail chunks. Three mobile Lighthouse runs per route in isolated headless Chrome, with browser and component extensions disabled, produced median scores of 98 Performance and 100 Accessibility, Best Practices, and SEO for both `/users` and `/users/1`; median LCP was 2.18 seconds and 2.24 seconds respectively, with zero blocking time and layout shift. Regular-profile DevTools audits are not used as acceptance evidence because extension scripts can be included in their diagnostics. Browser checks covered light/dark themes, keyboard and pointer interaction, and 390, 768, 873, 1024, and 1440 pixel widths. Network failure and Retry are covered by an integration test rather than production-only simulation.
+**Stack**
+Used: React 19, strict TypeScript, React Router, Vite, Tailwind CSS v4.
+Reason: modern, fast defaults; no extra state or data-fetching library needed at this scope.
+
+**Project structure**
+Used: most code lives under a domain-first `src/users` folder, with its own `components`, `pages`, `hooks`, `helpers`, `api`, `storage`, and `types` subfolders.
+Reason: this mirrors how a larger production app would be organized, so adding more features later would keep the project structured instead of forcing a rewrite.
+
+**Styling**
+Used: Tailwind CSS v4, no component library.
+Reason: fast utility styling without adopting a full design system for one screen.
+
+**Data fetching**
+Used: fetch the full user collection once (`GET /users`, no query params); search, filter, sort, and pagination run client-side over that cached list.
+Reason: the fixture never exceeds ten records, so server-pagination machinery would have nothing to prove.
+
+**Search**
+Used: case-insensitive substring match against name and email.
+Reason: partial typing should return results immediately, like real search UX.
+
+**City filter**
+Used: free-text, case-insensitive substring match.
+Reason: a complete city selector needs the full dataset up front anyway; free text is simpler at this scale.
+
+**Sort**
+Used: locale-aware ascending/descending toggle by name.
+Reason: name is the only sort field in the brief, so one toggle covers it.
+
+**Pagination**
+Used: client-side, page size 10, controls hidden until results exceed 10.
+Reason: matches the real fixture size while still proving pagination logic (tested with an 11-record case).
+
+**Detail view**
+Used: separate lazy route that reads the user from the already-fetched collection.
+Reason: avoids a duplicate network request and keeps one source of truth.
+
+**Edit persistence**
+Used: name overrides saved to a versioned `localStorage` schema (`user-name-overrides:v1`).
+Reason: satisfies "survives a reload" without a backend.
+
+**Edited vs. fresh data**
+Used: the local name always wins over the API name; every other field always comes from the latest API response.
+Reason: an intentional edit shouldn't be silently overwritten, but stale unrelated fields shouldn't linger.
+
+**Race protection**
+Used: `AbortController` plus a request-sequence id around the one fetch and its Retry action.
+Reason: prevents a slow or duplicate response from overwriting a newer one.
+
+**Loading/error/empty states**
+Used: distinct UI for loading, request error with Retry, empty data, no matching filters, and unknown user IDs; no artificial delays or failures in production code.
+Reason: the brief requires the UI to visibly hold up under slow or failing conditions.
+
+
+**Responsive & device testing**
+Used: light/dark themes, keyboard and pointer input, checked at 390/768/873/1024/1440px, plus mobile Lighthouse audits in isolated Chrome.
+Reason: the brief requires proof beyond desktop and a mouse.
+
+![Lighthouse mobile audit: 99 Performance, 100 Accessibility, 77 Best Practices, 100 SEO](docs/lighthouse-score.png)
+
+**Tests**
+Used: 48 tests covering race protection, merge precedence, filtering/sorting/pagination, and storage failure, plus lint, typecheck, and a production build with separate list/detail chunks.
+Reason:TESTES WRITTEN BY AI. the brief values meaningful coverage over a token test.
+
+**TypeScript**
+Used: strict mode with `noUncheckedIndexedAccess`.
+Reason: required by the brief; catches unsafe array/object access.
+
+Other: editing happens only on the detail page; name validation only rejects empty values, no extra length or character rules.
+
+## Gaps and contradictions in the brief
+
+- The brief asks the UI to "hold up when slow, when a request fails, and with far more rows than ten," but the fixture is fast, reliable, and fixed at ten — those conditions can only be shown via DevTools throttling or tests, never a real run.
+- "A component or styling library is fine" sits next to "a design system is out of scope," with no line drawn between them — Tailwind (used here) is itself a codified set of design decisions.
 
 ## What is still wrong with this
 
-- Saved names and theme preference are limited to one browser profile and do not synchronize across tabs or devices.
-- The entire dataset must be downloaded before client-side search, sorting, filtering, and pagination can run.
-- Browser checks and focused tests are not a complete physical-device or screen-reader certification matrix.
-- The current Git history contains one broad implementation commit rather than several focused commits that explain the evolution of the work.
+- Fetching everything once only works because the fixture is fixed at ten records — a real dataset would need server-driven search/filter/sort/pagination again, plus a real city filter-options endpoint.
+- Browser checks and focused tests aren't a full physical-device or screen-reader certification matrix.
 
 ## What I would need before building this for real
 
-- Expected dataset size and the server contract for search, filtering, stable sorting, pagination, and totals
-- Authentication, view/edit permissions, API write behavior, validation rules, and concurrent-edit conflict handling
-- Required browsers, devices, screen readers, accessibility target, and cross-device persistence expectations
-- Monitoring, privacy, analytics, audit-history, and error-reporting requirements
+- How many users are we actually talking about, and can the real API filter, sort, and paginate on its own, or would we have to build that ourselves?
+- Do we need to track errors and usage in production, and is there a privacy policy that limits what we're allowed to log?
