@@ -1,16 +1,20 @@
 import { Save, X } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { useUsers } from '../../hooks/useUsers/useUsers'
 import type { User } from '../../types/user'
 
 interface EditNameFormProps {
   user: User
   onCancel: () => void
-  onSaved: (message: string) => void
+  onSaved: () => void
 }
 
 export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
   const { saveName } = useUsers()
+  const formId = useId()
+  const titleId = `${formId}-title`
+  const nameInputId = `${formId}-name`
+  const nameErrorId = `${formId}-name-error`
   const [draftName, setDraftName] = useState(user.name)
   const [validationError, setValidationError] = useState<string | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -32,13 +36,13 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
       return
     }
 
-    onSaved('Name changes saved on this device.')
+    onSaved()
   }
 
   return (
-    <section className="mt-4 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900" aria-labelledby="edit-name-title">
+    <section className="mt-4 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900" aria-labelledby={titleId}>
       <div className="mb-5">
-        <h2 id="edit-name-title" className="text-base font-semibold text-neutral-950 dark:text-white">
+        <h2 id={titleId} className="text-base font-semibold text-neutral-950 dark:text-white">
           Edit display name
         </h2>
         <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
@@ -46,11 +50,11 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
         </p>
       </div>
       <form onSubmit={handleSubmit} noValidate>
-        <label htmlFor="user-name" className="mb-2 block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+        <label htmlFor={nameInputId} className="mb-2 block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
           Name
         </label>
         <input
-          id="user-name"
+          id={nameInputId}
           value={draftName}
           onChange={(event) => {
             setDraftName(event.currentTarget.value)
@@ -59,11 +63,11 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
           }}
           className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 aria-invalid:border-red-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-400"
           aria-invalid={validationError ? 'true' : undefined}
-          aria-describedby={validationError ? 'user-name-error' : undefined}
+          aria-describedby={validationError ? nameErrorId : undefined}
           autoFocus
         />
         {validationError ? (
-          <p id="user-name-error" className="mt-2 text-sm font-medium text-red-600 dark:text-red-400" role="alert">
+          <p id={nameErrorId} className="mt-2 text-sm font-medium text-red-600 dark:text-red-400" role="alert">
             {validationError}
           </p>
         ) : null}

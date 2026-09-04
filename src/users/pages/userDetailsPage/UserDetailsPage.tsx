@@ -51,8 +51,8 @@ function UserDetails({ user, returnPath }: { user: User; returnPath: string }) {
         <EditNameForm
           user={user}
           onCancel={() => setIsEditing(false)}
-          onSaved={(message) => {
-            setSaveStatus(message)
+          onSaved={() => {
+            setSaveStatus('Name changes saved on this device.')
             setIsEditing(false)
           }}
         />

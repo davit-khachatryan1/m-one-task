@@ -34,9 +34,9 @@ npm run build
 - Names are trimmed and cannot be empty. Unsaved drafts do not persist because only confirmed edits represent user intent.
 - The responsive UI uses one semantic table that reflows into cards below the medium breakpoint. The custom city and sort listboxes provide themed popups, keyboard navigation, typeahead, focus restoration, and appropriate ARIA state without adding a UI dependency.
 - An explicit light/dark preference persists under `app-theme:v1`; otherwise the application follows system color-scheme changes. Reduced motion, visible focus, semantic feedback, keyboard use, and pointer use are supported.
-- Tests are included because URL normalization, persistence precedence, storage failure, request retry/race protection, custom listbox behavior, routing, and theme behavior have meaningful regression risk. The current suite contains 25 behavior tests.
+- Tests are included because URL normalization, persistence precedence, storage failure, request retry/race protection, custom listbox behavior, routing, and theme behavior have meaningful regression risk. The current suite contains 26 behavior tests.
 - Ambiguities were resolved as follows: city filtering is single-select; editing occurs only on the detail page; pagination is client-side; only saved names and explicit theme choice use browser storage; URL state preserves list controls; name validation adds no unrequested length or character restrictions; cross-tab synchronization, backend persistence, authentication, conflict versioning, and analytics are out of scope.
-- Verification covered automated linting, strict type-checking, 25 tests, and a production build with separate list/detail chunks. Browser checks covered light/dark themes, keyboard and pointer interaction, and 390, 768, 873, 1024, and 1440 pixel widths. Network failure and Retry are covered by an integration test rather than production-only simulation.
+- Verification covered automated linting, strict type-checking, 26 tests, and a production build with separate list/detail chunks. Browser checks covered light/dark themes, keyboard and pointer interaction, and 390, 768, 873, 1024, and 1440 pixel widths. Network failure and Retry are covered by an integration test rather than production-only simulation.
 
 ## What is still wrong with this
 
