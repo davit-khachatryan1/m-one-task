@@ -227,7 +227,7 @@ export function FilterDropdown<Value extends string>({
         aria-haspopup="listbox"
         aria-labelledby={labelId}
         aria-activedescendant={isOpen ? `${listboxId}-option-${activeIndex}` : undefined}
-        className="flex h-10 w-full items-center rounded-lg border border-neutral-300 bg-white text-left text-sm font-medium text-neutral-900 outline-none transition hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-500"
+        className="flex h-10 w-full items-center rounded-lg border border-neutral-300 bg-white text-left text-sm font-medium text-neutral-900 outline-none transition hover:border-[#9DC0BC] focus:border-brand-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:focus:border-brand-500"
         onClick={() => (isOpen ? closeDropdown() : openDropdown())}
         onKeyDown={handleKeyDown}
       >

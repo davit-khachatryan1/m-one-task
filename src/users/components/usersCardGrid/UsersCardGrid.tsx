@@ -60,7 +60,7 @@ export function UsersCardGrid({ users, fromList }: UsersCardGridProps) {
 
           <div className="mt-auto pt-5">
             <Link
-              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-4 text-sm font-medium text-neutral-950 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:focus-visible:ring-offset-neutral-900"
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 motion-reduce:transition-none dark:text-neutral-950 dark:focus-visible:ring-offset-neutral-900"
               to={`/users/${user.id}`}
               state={{ fromList }}
               aria-label={`View details for ${user.name}`}

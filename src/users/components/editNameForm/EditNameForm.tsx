@@ -61,7 +61,7 @@ export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
             setValidationError(null)
             setSaveError(null)
           }}
-          className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 hover:border-neutral-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 aria-invalid:border-red-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:hover:border-neutral-600 dark:focus:border-brand-500"
+          className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 hover:border-[#9DC0BC] focus:border-brand-500 aria-invalid:border-red-500 motion-reduce:transition-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white dark:focus:border-brand-500"
           aria-invalid={validationError ? 'true' : undefined}
           aria-describedby={validationError ? nameErrorId : undefined}
           autoFocus

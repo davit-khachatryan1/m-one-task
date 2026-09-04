@@ -8,14 +8,12 @@ import { USER_NAME_OVERRIDES_KEY } from '../../storage/userNameOverrides/userNam
 import UserDetailsPage from './UserDetailsPage'
 
 function renderDetails(users = [sampleUser]) {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => users,
-    }),
-  )
+  const fetchMock = vi.fn().mockResolvedValue({
+    ok: true,
+    status: 200,
+    json: async () => users,
+  })
+  vi.stubGlobal('fetch', fetchMock)
 
   const router = createMemoryRouter(
     [
@@ -32,7 +30,7 @@ function renderDetails(users = [sampleUser]) {
   )
 
   render(<RouterProvider router={router} />)
-  return router
+  return { router, fetchMock }
 }
 
 describe('UserDetailsPage editing', () => {
@@ -86,7 +84,7 @@ describe('UserDetailsPage editing', () => {
   it('resets editing state and the draft when the selected user changes', async () => {
     const interaction = userEvent.setup()
     const secondUser = makeUser(2, 'Ervin Howell', 'ervin@example.com', 'Wisokyburgh')
-    const router = renderDetails([sampleUser, secondUser])
+    const { router, fetchMock } = renderDetails([sampleUser, secondUser])
 
     await screen.findByRole('heading', { name: sampleUser.name, level: 1 })
     await interaction.click(screen.getByRole('button', { name: /edit name/i }))
@@ -101,5 +99,6 @@ describe('UserDetailsPage editing', () => {
 
     await interaction.click(screen.getByRole('button', { name: /edit name/i }))
     expect(screen.getByRole('textbox', { name: 'Name' })).toHaveValue(secondUser.name)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })

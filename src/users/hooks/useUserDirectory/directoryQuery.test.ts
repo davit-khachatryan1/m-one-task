@@ -1,83 +1,57 @@
 import { describe, expect, it } from 'vitest'
-import { makeUser } from '../../../test/fixtures'
 import {
-  deriveUserList,
-  getAvailableCities,
-  normalizeSearchValue,
+  createUsersListQuery,
+  getTotalPages,
+  normalizeFilterValue,
   parseListSearchParams,
 } from './directoryQuery'
 
-const users = [
-  makeUser(1, 'Leanne Graham', 'Sincere@april.biz', 'Gwenborough'),
-  makeUser(2, 'Ana Bell', 'ana@example.com', 'London'),
-  makeUser(3, 'Zoë Carter', 'zoe@example.com', 'Gwenborough'),
-]
-
 describe('user directory query', () => {
-  it('normalizes case and repeated whitespace when searching names or emails', () => {
-    expect(normalizeSearchValue('  LEANNE    Graham  ')).toBe('leanne graham')
-
-    const nameResult = deriveUserList(users, {
-      searchText: '  LEANNE    graham ',
-      city: '',
-      sortDirection: 'asc',
-      page: 1,
-    })
-    const emailResult = deriveUserList(users, {
-      searchText: '  APRIL.BIZ ',
-      city: '',
-      sortDirection: 'asc',
-      page: 1,
-    })
-
-    expect(nameResult.items.map((user) => user.id)).toEqual([1])
-    expect(emailResult.items.map((user) => user.id)).toEqual([1])
+  it('normalizes surrounding and repeated whitespace without changing case', () => {
+    expect(normalizeFilterValue('  Leanne    Graham  ')).toBe('Leanne Graham')
   })
 
-  it('filters by one city and sorts names in both directions', () => {
-    const ascending = deriveUserList(users, {
-      searchText: '',
-      city: 'Gwenborough',
-      sortDirection: 'asc',
-      page: 1,
-    })
-    const descending = deriveUserList(users, {
-      searchText: '',
-      city: 'Gwenborough',
-      sortDirection: 'desc',
-      page: 1,
-    })
-
-    expect(ascending.items.map((user) => user.name)).toEqual(['Leanne Graham', 'Zoë Carter'])
-    expect(descending.items.map((user) => user.name)).toEqual(['Zoë Carter', 'Leanne Graham'])
-    expect(getAvailableCities(users)).toEqual(['Gwenborough', 'London'])
-  })
-
-  it('paginates and clamps a page that is no longer available', () => {
-    const largerSet = Array.from({ length: 7 }, (_, index) =>
-      makeUser(index + 1, `User ${index + 1}`, `user${index + 1}@example.com`, 'Yerevan'),
-    )
-    const result = deriveUserList(
-      largerSet,
-      { searchText: '', city: '', sortDirection: 'asc', page: 99 },
-      5,
-    )
-
-    expect(result.page).toBe(2)
-    expect(result.totalPages).toBe(2)
-    expect(result.items).toHaveLength(2)
-  })
-
-  it('normalizes invalid URL values to supported defaults', () => {
-    const state = parseListSearchParams(
-      new URLSearchParams('q=Leanne&city=Gwenborough&sort=sideways&page=-3'),
-    )
-
-    expect(state).toEqual({
+  it('parses descriptive browser parameters independently from API names', () => {
+    expect(
+      parseListSearchParams(
+        new URLSearchParams('search=Leanne&city=Gwenborough&sort=name-desc&page=3'),
+      ),
+    ).toEqual({
       searchText: 'Leanne',
-      city: 'Gwenborough',
-      sortDirection: 'asc',
+      cityText: 'Gwenborough',
+      sort: 'name-desc',
+      page: 3,
+    })
+  })
+
+  it('falls back safely for invalid sort and page parameters', () => {
+    expect(parseListSearchParams(new URLSearchParams('sort=sideways&page=-3'))).toEqual({
+      searchText: '',
+      cityText: '',
+      sort: 'name-asc',
       page: 1,
     })
+  })
+
+  it('creates a normalized client-side query with the fixed page size', () => {
+    expect(
+      createUsersListQuery(
+        { sort: 'name-desc', page: 2 },
+        '  Leanne   Graham ',
+        ' Gwenborough ',
+      ),
+    ).toEqual({
+      search: 'Leanne Graham',
+      city: 'Gwenborough',
+      sort: 'name-desc',
+      page: 2,
+      pageSize: 10,
+    })
+  })
+
+  it('calculates page boundaries from the filtered total', () => {
+    expect(getTotalPages(0)).toBe(0)
+    expect(getTotalPages(10)).toBe(1)
+    expect(getTotalPages(11)).toBe(2)
   })
 })

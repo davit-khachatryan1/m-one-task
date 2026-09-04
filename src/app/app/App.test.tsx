@@ -43,14 +43,12 @@ describe('application routes', () => {
   })
 
   it('preserves the originating list state through detail navigation', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: async () => [sampleUser],
-      }),
-    )
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => [sampleUser],
+    })
+    vi.stubGlobal('fetch', fetchMock)
     const interaction = userEvent.setup()
     renderApp('/users?city=Gwenborough')
 
@@ -61,8 +59,7 @@ describe('application routes', () => {
 
     await interaction.click(screen.getByRole('link', { name: 'Back to users' }))
 
-    expect(await screen.findByRole('combobox', { name: 'City' })).toHaveTextContent(
-      'Gwenborough',
-    )
+    expect(await screen.findByRole('searchbox', { name: 'City' })).toHaveValue('Gwenborough')
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })

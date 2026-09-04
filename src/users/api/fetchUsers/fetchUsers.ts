@@ -49,6 +49,14 @@ function isUser(value: unknown): value is User {
   )
 }
 
+async function readJson(response: Response, resource: string): Promise<unknown> {
+  try {
+    return await response.json()
+  } catch {
+    throw new Error(`The ${resource} service returned invalid JSON.`)
+  }
+}
+
 export async function fetchUsers(signal: AbortSignal): Promise<User[]> {
   const response = await fetch(USERS_ENDPOINT, { signal })
 
@@ -56,13 +64,7 @@ export async function fetchUsers(signal: AbortSignal): Promise<User[]> {
     throw new Error(`Unable to load users (HTTP ${response.status}).`)
   }
 
-  let payload: unknown
-
-  try {
-    payload = await response.json()
-  } catch {
-    throw new Error('The users service returned invalid JSON.')
-  }
+  const payload = await readJson(response, 'users')
 
   if (!Array.isArray(payload) || !payload.every(isUser)) {
     throw new Error('The users service returned an unexpected response.')

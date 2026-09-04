@@ -68,14 +68,15 @@ export default function UserDetailsPage() {
   const { userId } = useParams()
   const location = useLocation()
   const parsedUserId = Number(userId)
-  const user = Number.isInteger(parsedUserId)
+  const hasValidUserId = Number.isInteger(parsedUserId) && parsedUserId > 0
+  const user = hasValidUserId
     ? users.find((candidate) => candidate.id === parsedUserId)
     : undefined
   const returnPath = getReturnPath(location.state)
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-      {status === 'loading' ? (
+      {hasValidUserId && (status === 'idle' || status === 'loading') ? (
         <PageState
           headingLevel={1}
           title="Loading user"
@@ -85,7 +86,7 @@ export default function UserDetailsPage() {
         />
       ) : null}
 
-      {status === 'error' ? (
+      {hasValidUserId && status === 'error' ? (
         <PageState
           headingLevel={1}
           title="Unable to load user"
@@ -104,7 +105,7 @@ export default function UserDetailsPage() {
         />
       ) : null}
 
-      {status === 'success' && !user ? (
+      {(!hasValidUserId || (status === 'success' && !user)) ? (
         <PageState
           headingLevel={1}
           title="User not found"
@@ -122,7 +123,7 @@ export default function UserDetailsPage() {
         />
       ) : null}
 
-      {status === 'success' && user ? (
+      {hasValidUserId && status === 'success' && user ? (
         <UserDetails key={user.id} user={user} returnPath={returnPath} />
       ) : null}
     </main>

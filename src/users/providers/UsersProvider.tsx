@@ -24,14 +24,7 @@ export function UsersProvider({ children }: UsersProviderProps) {
   const activeController = useRef<AbortController | null>(null)
   const requestSequence = useRef(0)
 
-  const beginRequest = useCallback(() => {
-    activeController.current?.abort()
-
-    const controller = new AbortController()
-    const requestId = requestSequence.current + 1
-    requestSequence.current = requestId
-    activeController.current = controller
-
+  const runFetch = useCallback((controller: AbortController, requestId: number) => {
     void fetchUsers(controller.signal)
       .then((users) => {
         if (controller.signal.aborted || requestSequence.current !== requestId) {
@@ -50,20 +43,33 @@ export function UsersProvider({ children }: UsersProviderProps) {
         setError(getErrorMessage(requestError))
         setStatus('error')
       })
-
-    return controller
   }, [])
 
-  useEffect(() => {
-    const controller = beginRequest()
-    return () => controller.abort()
-  }, [beginRequest])
+  const startRequest = useCallback(() => {
+    activeController.current?.abort()
 
-  const retry = useCallback(() => {
+    const controller = new AbortController()
+    const requestId = requestSequence.current + 1
+    requestSequence.current = requestId
+    activeController.current = controller
+
+    return { controller, requestId }
+  }, [])
+
+  const load = useCallback(() => {
+    const { controller, requestId } = startRequest()
     setStatus('loading')
     setError(null)
-    beginRequest()
-  }, [beginRequest])
+    runFetch(controller, requestId)
+  }, [runFetch, startRequest])
+
+  useEffect(() => {
+    const { controller, requestId } = startRequest()
+    runFetch(controller, requestId)
+    return () => controller.abort()
+  }, [runFetch, startRequest])
+
+  const retry = useCallback(() => load(), [load])
 
   const users = useMemo(
     () => mergeUserNameOverrides(baseUsers, overrides),
@@ -91,7 +97,13 @@ export function UsersProvider({ children }: UsersProviderProps) {
   )
 
   const value = useMemo(
-    () => ({ status, users, error, retry, saveName }),
+    () => ({
+      status,
+      users,
+      error,
+      retry,
+      saveName,
+    }),
     [error, retry, saveName, status, users],
   )
 

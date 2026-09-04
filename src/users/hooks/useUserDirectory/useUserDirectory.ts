@@ -1,61 +1,77 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import type { UsersLoadStatus } from '../../providers/UsersContext'
+import { selectUsersPage } from '../../helpers/selectUsersPage/selectUsersPage'
 import type { User } from '../../types/user/user'
 import {
-  deriveUserList,
-  getAvailableCities,
+  createUsersListQuery,
+  getTotalPages,
   parseListSearchParams,
-  type SortDirection,
+  type UserSort,
 } from './directoryQuery'
 
-export function useUserDirectory(users: readonly User[], status: UsersLoadStatus) {
+interface UseUserDirectoryOptions {
+  users: User[]
+  isReady: boolean
+}
+
+export function useUserDirectory({ users, isReady }: UseUserDirectoryOptions) {
   const [searchParams, setSearchParams] = useSearchParams()
   const state = useMemo(() => parseListSearchParams(searchParams), [searchParams])
-  const cities = useMemo(() => getAvailableCities(users), [users])
-  const result = useMemo(() => deriveUserList(users, state), [state, users])
+  const query = useMemo(
+    () => createUsersListQuery(state, state.searchText, state.cityText),
+    [state],
+  )
+
+  const totalCount = useMemo(() => selectUsersPage(users, query).totalCount, [users, query])
+  const totalPages = getTotalPages(totalCount)
+  const isPageInvalid = isReady && state.page > Math.max(totalPages, 1)
+  const effectivePage = Math.max(1, Math.min(state.page, Math.max(totalPages, 1)))
+
+  const pageUsers = useMemo(
+    () => selectUsersPage(users, { ...query, page: effectivePage }).users,
+    [users, query, effectivePage],
+  )
 
   useEffect(() => {
-    if (status !== 'success') {
-      return
-    }
+    const rawPage = searchParams.get('page')
+    const rawSort = searchParams.get('sort')
+    const hasInvalidPage = rawPage !== null && String(state.page) !== rawPage
+    const hasInvalidSort = rawSort !== null && rawSort !== 'name-asc' && rawSort !== 'name-desc'
 
-    const currentPage = searchParams.get('page')
-    const expectedPage = result.page > 1 ? String(result.page) : null
-    const sort = searchParams.get('sort')
-    const city = searchParams.get('city')
-    const query = searchParams.get('q')
-    const invalidSort = sort !== null && sort !== 'desc'
-    const invalidCity = city !== null && !cities.includes(city)
-    const emptyQuery = query !== null && !query.trim()
-
-    if (currentPage === expectedPage && !invalidSort && !invalidCity && !emptyQuery) {
+    if (!hasInvalidPage && !hasInvalidSort && !isPageInvalid) {
       return
     }
 
     const nextParams = new URLSearchParams(searchParams)
 
-    if (expectedPage) {
-      nextParams.set('page', expectedPage)
-    } else {
+    if (hasInvalidSort) nextParams.delete('sort')
+
+    if (isPageInvalid) {
+      const safePage = Math.max(totalPages, 1)
+      if (safePage === 1) nextParams.delete('page')
+      else nextParams.set('page', String(safePage))
+    } else if (hasInvalidPage) {
       nextParams.delete('page')
     }
 
-    if (invalidSort) nextParams.delete('sort')
-    if (invalidCity) nextParams.delete('city')
-    if (emptyQuery) nextParams.delete('q')
-
     setSearchParams(nextParams, { replace: true })
-  }, [cities, result.page, searchParams, setSearchParams, status])
+  }, [isPageInvalid, searchParams, setSearchParams, state.page, totalPages])
 
-  function updateFilter(key: 'q' | 'city' | 'sort', value: string) {
+  function updateFilter(key: 'search' | 'city', value: string) {
     const nextParams = new URLSearchParams(searchParams)
 
-    if (!value || (key === 'q' && !value.trim()) || (key === 'sort' && value === 'asc')) {
-      nextParams.delete(key)
-    } else {
-      nextParams.set(key, value)
-    }
+    if (!value.trim()) nextParams.delete(key)
+    else nextParams.set(key, value)
+
+    nextParams.delete('page')
+    setSearchParams(nextParams, { replace: true })
+  }
+
+  function setSort(sort: UserSort) {
+    const nextParams = new URLSearchParams(searchParams)
+
+    if (sort === 'name-asc') nextParams.delete('sort')
+    else nextParams.set('sort', sort)
 
     nextParams.delete('page')
     setSearchParams(nextParams, { replace: true })
@@ -64,22 +80,20 @@ export function useUserDirectory(users: readonly User[], status: UsersLoadStatus
   function goToPage(page: number) {
     const nextParams = new URLSearchParams(searchParams)
 
-    if (page <= 1) {
-      nextParams.delete('page')
-    } else {
-      nextParams.set('page', String(page))
-    }
+    if (page <= 1) nextParams.delete('page')
+    else nextParams.set('page', String(page))
 
     setSearchParams(nextParams)
   }
 
   return {
     state,
-    cities,
-    result,
-    setSearchText: (value: string) => updateFilter('q', value),
-    setCity: (value: string) => updateFilter('city', value),
-    setSortDirection: (value: SortDirection) => updateFilter('sort', value),
+    users: pageUsers,
+    totalCount,
+    totalPages,
+    setSearchText: (value: string) => updateFilter('search', value),
+    setCityText: (value: string) => updateFilter('city', value),
+    setSort,
     goToPage,
     clearFilters: () => setSearchParams({}, { replace: true }),
   }
