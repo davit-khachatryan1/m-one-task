@@ -44,6 +44,12 @@ Folders use lower camel case. React component filenames use PascalCase. Focused 
 
 `UsersListPage` and `UserDetailsPage` are separate `React.lazy` entry points in `App.tsx`. `UsersRouteLayout` owns `UsersProvider` outside the `Suspense` boundary, which preserves fetched data and overrides during list/detail navigation. The provider is scoped to the `/users` route tree so unrelated and unknown routes do not fetch users. Do not introduce arbitrary manual chunk configuration.
 
+## Deployment and performance contract
+
+The Vercel deployment is a client-rendered Vite SPA. The root `vercel.json` rewrites all application requests to `/index.html` so direct visits and refreshes reach React Router. Keep `cleanUrls` disabled, and preserve real root assets such as `favicon.svg` and `robots.txt` when changing deployment routing.
+
+The document preconnects to `https://jsonplaceholder.typicode.com` because the initial user content depends on that origin. The verified local production baseline uses three mobile Lighthouse runs per route in isolated headless Chrome with browser and component extensions disabled: `/users` and `/users/1` both have median scores of 98 Performance and 100 Accessibility, Best Practices, and SEO, with zero blocking time and layout shift. Do not use regular-profile DevTools audits as acceptance evidence because extension scripts can appear as unused or unminified application JavaScript. Treat these scores as regression targets rather than guarantees from a single run; the external API and audit environment can affect timing.
+
 ## User data and API boundary
 
 The only remote endpoint is:
@@ -126,6 +132,7 @@ Tests focus on behavior with meaningful regression value:
 - storage validation, override precedence, initialization, redundant override removal, and write failure
 - request failure followed by Retry success
 - detail validation, Cancel, Save success, and persistence failure
+- valid description-list grouping for detail terms and definitions
 - dropdown pointer, outside-click, focus, keyboard, and typeahead behavior
 - theme system resolution, system changes, persisted preference, DOM application, and storage fallback
 - root redirect, lazy list/detail routes, unknown routes without a user fetch, and list-state restoration

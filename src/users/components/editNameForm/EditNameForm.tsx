@@ -11,10 +11,10 @@ interface EditNameFormProps {
 
 export function EditNameForm({ user, onCancel, onSaved }: EditNameFormProps) {
   const { saveName } = useUsers()
-  const formId = useId()
-  const titleId = `${formId}-title`
-  const nameInputId = `${formId}-name`
-  const nameErrorId = `${formId}-name-error`
+  const idPrefix = useId()
+  const titleId = `${idPrefix}-title`
+  const nameInputId = `${idPrefix}-name`
+  const nameErrorId = `${idPrefix}-name-error`
   const [draftName, setDraftName] = useState(user.name)
   const [validationError, setValidationError] = useState<string | null>(null)
   const [saveError, setSaveError] = useState<string | null>(null)

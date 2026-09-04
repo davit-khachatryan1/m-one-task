@@ -28,38 +28,38 @@ export function UserDetailsGrid({ user }: UserDetailsGridProps) {
     <div className="mt-4 grid gap-4 lg:grid-cols-2">
       <DetailCard title="Contact details" icon={<Mail size={17} />}>
         <dl className="grid gap-5">
-          <div className="flex gap-3">
-            <Mail className="mt-0.5 shrink-0 text-neutral-400" aria-hidden="true" size={17} />
-            <div className="min-w-0">
-              <dt className={termClassName}>Email</dt>
-              <dd className={definitionClassName}>
-                <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`mailto:${user.email}`}>
-                  {user.email}
-                </a>
-              </dd>
-            </div>
+          <div>
+            <dt className={`${termClassName} flex items-center gap-3`}>
+              <Mail className="shrink-0 text-neutral-400" aria-hidden="true" size={17} />
+              <span>Email</span>
+            </dt>
+            <dd className={`${definitionClassName} pl-7`}>
+              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`mailto:${user.email}`}>
+                {user.email}
+              </a>
+            </dd>
           </div>
-          <div className="flex gap-3">
-            <Phone className="mt-0.5 shrink-0 text-neutral-400" aria-hidden="true" size={17} />
-            <div className="min-w-0">
-              <dt className={termClassName}>Phone</dt>
-              <dd className={definitionClassName}>
-                <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`tel:${user.phone}`}>
-                  {user.phone}
-                </a>
-              </dd>
-            </div>
+          <div>
+            <dt className={`${termClassName} flex items-center gap-3`}>
+              <Phone className="shrink-0 text-neutral-400" aria-hidden="true" size={17} />
+              <span>Phone</span>
+            </dt>
+            <dd className={`${definitionClassName} pl-7`}>
+              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`tel:${user.phone}`}>
+                {user.phone}
+              </a>
+            </dd>
           </div>
-          <div className="flex gap-3">
-            <Globe2 className="mt-0.5 shrink-0 text-neutral-400" aria-hidden="true" size={17} />
-            <div className="min-w-0">
-              <dt className={termClassName}>Website</dt>
-              <dd className={definitionClassName}>
-                <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`https://${user.website}`} target="_blank" rel="noreferrer">
-                  {user.website}
-                </a>
-              </dd>
-            </div>
+          <div>
+            <dt className={`${termClassName} flex items-center gap-3`}>
+              <Globe2 className="shrink-0 text-neutral-400" aria-hidden="true" size={17} />
+              <span>Website</span>
+            </dt>
+            <dd className={`${definitionClassName} pl-7`}>
+              <a className="text-brand-700 hover:underline hover:underline-offset-2 dark:text-brand-300" href={`https://${user.website}`} target="_blank" rel="noreferrer">
+                {user.website}
+              </a>
+            </dd>
           </div>
         </dl>
       </DetailCard>
