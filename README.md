@@ -104,6 +104,7 @@ Other: editing happens only on the detail page; name validation only rejects emp
 
 - Fetching everything once only works because the fixture is fixed at ten records — a real dataset would need server-driven search/filter/sort/pagination again, plus a real city filter-options endpoint.
 - Browser checks and focused tests aren't a full physical-device or screen-reader certification matrix.
+- Code splitting can be more robust I can have more shared components like button, Card items and ect.
 
 ## What I would need before building this for real
 
